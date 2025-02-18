@@ -1,6 +1,32 @@
 @extends($activeTemplate . 'user.layouts.app')
 
 @section('panel')
+<div class="row">
+    <div class="col-xl-12 wow fadeInUp" data-wow-delay="1.2s">
+        
+        <div class="card overflow-hidden">
+            <div class="card-header" style="display:block;">
+                <h1 class="text-center">Active Packages</h1>
+            </div>
+            <div class="card-body pb-0 mb-4">
+                <div class="row text-center">
+                    @foreach ($plans as $plan)
+                    <div class="col-3 mt-4 mb-2">
+                        <div class="bgl-secondary rounded p-3">
+                            <h5 class="text-white">{{ $plan->plan->name }}</h5>
+                            <span class="text-white">{{ $general->cur_sym }}{{ $plan->amount }}</span>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+                {{-- <div class="card-footer pt-0 pb-0 text-center">
+                    <div class="row mt-4">
+                    </div>
+                </div> --}}
+            </div>  
+        </div>
+    </div>
+</div>
 <div class="swiper mySwiper-counter position-relative overflow-hidden">
     <div class="swiper-wrapper ">
         <!--swiper-slide-->

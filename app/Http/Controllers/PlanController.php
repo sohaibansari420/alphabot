@@ -430,6 +430,8 @@ class PlanController extends Controller
             'roi_status' => $roi_status,
             'plan_roi' => $plan->is_roi,
             'planStartHours' => $planStartHours,
+            'type' => $plan->type,
+            'plan_points' => $plan->with_point,
         ];
         return $data;
     }
