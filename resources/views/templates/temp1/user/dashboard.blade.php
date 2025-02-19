@@ -639,10 +639,9 @@
                 <div class="row text-center">
                     @foreach ($plans as $plan)
                     @if ($plan->type == "sponsor")
-                        <div class="col-4 mt-4 mb-2">
-                            <div class="bgl-primary rounded p-3">
-                                <h5 class="text-white">{{ $plan->plan->name }}</h5>
-                                <span class="text-white">{{ $general->cur_sym }}{{ $plan->amount }}</span>
+                        <div class="col-md-4 mt-4 mb-2">
+                            <div class="bgl-primary rounded p-2 pt-4">
+                                <p class="text-white"><strong>{{ $plan->plan->name }}</strong>: {{ $general->cur_sym }}{{ $plan->amount }}</p>
                             </div>
                         </div>
                     @endif
