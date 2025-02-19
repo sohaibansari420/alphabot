@@ -190,7 +190,7 @@
                                 alert('Package is with only points,so you don"t have the access to roi operation.')
                             }
                             $('#trx').val(data.trx);
-                            if ((day === 0 || day === 6) && (data.roi_status == 0 && data.plan_roi == 1 && data.planStartHours == 1)) {
+                            if ((day === 0 || day === 6 || (data.roi_status == 0 && data.plan_roi == 1 && data.planStartHours == 1))) {
                                 $('#compounding').prop('disabled', false);
                             }else{
                                 $('#compounding').prop('disabled', true);   
