@@ -674,9 +674,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">@lang('Promotion')</h5>
-                    {{-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button> --}}
+                    <button style="position: absolute;top: 0px;right: 0px;padding: 5px;border: 0px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" id="modelClose">&times;</span>
+                    </button>
                 </div>
                 @foreach ($promotions as $promo)
                     <div class="modal-body">
@@ -717,6 +717,9 @@
     <script>
         $(document).ready(function(){
             $('#show_promotions').modal('show');
+        })
+        $('#modelClose').on('click',function(){
+            $("#show_promotions").modal('hide')
         })
     </script>
     <script>
