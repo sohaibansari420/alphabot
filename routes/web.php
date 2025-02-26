@@ -235,6 +235,8 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function () {
         // Promotions
         Route::get('promotion','PromotionController@userPromotion')->name('promotion.index');
         Route::post('save-promotion','PromotionController@saveUserPromotion')->name('save.promotion');
+        Route::get('edit-promotion','PromotionController@editPromotion')->name('promotion.edit');
+        Route::post('update-promotion','PromotionController@updateUserPromotion')->name('update.promotion');
         Route::post('delete-promotion','PromotionController@deleteUserPromotion')->name('delete.promotion');
 
         // Deposit Gateway
