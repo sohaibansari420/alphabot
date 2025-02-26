@@ -68,7 +68,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('admin.save.promotion') }}" method="POST">
+                <form action="{{ route('admin.save.promotion') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <div class="form-row">
@@ -135,7 +135,7 @@
                                 <div class="input-group">
                                     <span class="input-group-btn">
                                         <span class="btn btn-primary btn-file">
-                                            Browse… <input type="file" name="image" id="imgInp">
+                                            Browse… <input type="file" name="image" id="imgInp" accept=".png, .jpg, .jpeg, .svg">
                                         </span>
                                     </span>
                                     <input id="image-upload" type="text" class="form-control" readonly>

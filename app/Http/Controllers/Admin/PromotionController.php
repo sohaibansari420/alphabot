@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Promotion;
 use App\Models\User;
+use Illuminate\Support\Facades\File;
 
 class PromotionController extends Controller
 {
@@ -23,12 +24,12 @@ class PromotionController extends Controller
             'name'                      => 'required',
             'image'                     => 'mimes:png,jpg,jpeg,svg'
         ]);
-        
         $fileimage = '';
         $user_id = '';
         $country = '';
 
         if ($request->hasFile('image')) {
+            
             $file = $request->file('image');
 
             // Real File Name
@@ -47,22 +48,27 @@ class PromotionController extends Controller
             $location = 'assets/images/promotions/';
 
             $link = $location . $filename;
+
+            if (!File::exists($location)) {
+                File::makeDirectory($location, 0777, true, true); // Recursive, with full permissions
+            }
+
             if (file_exists($link)) {
                 @unlink($link);
             }
 
-            if($file_type == 'image/svg' || $file_type = 'mage/svg+xml'){
+            if($file_type == 'image/svg' || $file_type == 'mage/svg+xml'){
                 //Move Uploaded File
                 $file->move($location,$filename);
             }
             else{
-                $size = "200x200";
-                $image = Image::make($file);
-                $size = explode('x', strtolower($size));
-                $image->resize($size[0], $size[1]);
-                $image->save($location . '/' . $filename);                
+                $file->move($location,$filename);
+                // $size = "200x200";
+                // $image = Image::make($file);
+                // $size = explode('x', strtolower($size));
+                // $image->resize($size[0], $size[1]);
+                // $image->save($location . '/' . $filename);                
             }
-
             $fileimage = $filename;
         }
 

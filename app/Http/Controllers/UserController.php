@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Image;
 use Validator;
+use App\Models\Promotion;
 
 class UserController extends Controller
 {
@@ -68,6 +69,7 @@ class UserController extends Controller
         $data['commissions']        = Commission::where('status', 1)->get();
         $data['rank']               = Rank::where(["id" => Auth::user()->rank_id])->first();
         $data['next_rank']          = Rank::where(["id" => Auth::user()->rank_id + 1])->first();
+        $data['promotions']         = Promotion::where('status',1)->get();
 
         if(getUserLowerPlan(Auth::id())){
             $data['same_direct']    = UserFamily::selectRaw('user_id, COUNT(*) as user_count')

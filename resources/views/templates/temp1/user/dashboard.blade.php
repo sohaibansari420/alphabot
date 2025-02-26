@@ -668,10 +668,57 @@
     </div>
 @endif
 <!--End row-->
-
+@if(count($promotions) > 0 )
+    <div id="show_promotions" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@lang('Promotion')</h5>
+                    {{-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button> --}}
+                </div>
+                @foreach ($promotions as $promo)
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <img id='img-upload' src="{{asset('assets/images/promotions/'.$promo->image)}}" style="width: 100%;height: 100%;" alt="Promotion Image"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-12">
+                                <label for="name" class="col-form-label">Name:</label>
+                                <input type="text" class="form-control" value="{{ $promo->name }}" readonly>
+                            </div>
+                        </div>
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-12">
+                                <label for="name" class="col-form-label">Date Started:</label>
+                                <input type="text" class="form-control" value="{{ \Carbon\Carbon::parse($promo->start)->format('d M Y') }}" readonly>
+                            </div>
+                        </div>
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-12">
+                                <label for="name" class="col-form-label">Date End:</label>
+                                <input type="text" class="form-control" value="{{ \Carbon\Carbon::parse($promo->end)->format('d M Y') }}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+@endif
 @endsection
 
 @push('script')
+    <script>
+        $(document).ready(function(){
+            $('#show_promotions').modal('show');
+        })
+    </script>
     <script>
         var copy = function(elementId) {
 
