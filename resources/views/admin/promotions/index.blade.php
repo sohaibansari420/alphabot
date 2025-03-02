@@ -251,10 +251,9 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-3 offset-md-9">
-                                <label class="font-weight-bold">@lang('Status')</label>
-                                <input  type="checkbox" data-width="100%" data-onstyle="-success" data-offstyle="-danger"
-                                    data-toggle="toggle" data-on="@lang('Active')" data-off="@lang('Inactive')"
-                                    name="status" checked>
+                                <label class="font-weight-bold" for="status">@lang('Status')</label>
+                                <input  type="checkbox" name="status" id="status" data-width="100%" data-onstyle="-success" data-offstyle="-danger"
+                                    data-toggle="toggle" data-on="@lang('Active')" data-off="@lang('Inactive')" checked>
                             </div>
                         </div>
                     </div>
@@ -325,9 +324,6 @@
             $('.datepicker-here').datepicker({
                 autoclose: true,
             });
-            @if (@$country)
-                $(`option[data-country={{ $country }}]`).attr('selected', '');
-            @endif
         })(jQuery)
 
         function AddPromotion(){
@@ -364,10 +360,10 @@
                             $('#edit_promotion #country_id').val(selectedValues).trigger('change');
                         }
 
-                        if (data.status === 0) {
-                            $('#edit_promotion [name="status"]').prop("checked", true); // Check the checkbox
+                        if (data.status == 1) {
+                            $('#edit_promotion [name="status"]').prop("checked", true).change();
                         } else {
-                            $('#edit_promotion [name="status"]').prop("checked", false); // Uncheck the checkbox
+                            $('#edit_promotion [name="status"]').prop("checked", false).change();
                         }
                         if (data.image) {
 
