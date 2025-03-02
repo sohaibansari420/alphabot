@@ -61,7 +61,7 @@ class CronController extends Controller
                             else{
                                 $percent = $commission->commissionDetail[0]->percent;
                                 $limit = $commission->commissionDetail[0]->commission_limit;
-                                referralCommission($cron->user_id, $commission->wallet_id, $percent, $commission->id, $commission->name, $limit, $plan_id);
+                                // referralCommission($cron->user_id, $commission->wallet_id, $percent, $commission->id, $commission->name, $limit, $plan_id);
                             }
                         }
                     }
