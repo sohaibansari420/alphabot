@@ -669,16 +669,16 @@
 @endif
 <!--End row-->
 @if(count($promotions) > 0 )
-    <div id="show_promotions" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">@lang('Promotion')</h5>
-                    <button style="position: absolute;top: 0px;right: 0px;padding: 5px;border: 0px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true" id="modelClose">&times;</span>
-                    </button>
-                </div>
-                @foreach ($promotions as $promo)
+    @foreach ($promotions as $key => $promo)
+        <div id="show_promotions_{{ $key }}" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">@lang('Promotion')</h5>
+                        <button style="position: absolute;top: 0px;right: 0px;padding: 5px;border: 0px;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" id="modelClose_{{ $key }}">&times;</span>
+                        </button>
+                    </div>
                     <div class="modal-body">
                         <div class="form-row">
                             <div class="form-group col-md-12">
@@ -705,21 +705,27 @@
                                 <input type="text" class="form-control" value="{{ \Carbon\Carbon::parse($promo->end)->format('d M Y') }}" readonly>
                             </div>
                         </div>
-                    </div>
-                @endforeach
+                    </div> 
+                </div>
             </div>
         </div>
-    </div>
+    @endforeach
 @endif
 @endsection
 
 @push('script')
     <script>
+        var promotions = @json($promotions);
         $(document).ready(function(){
-            $('#show_promotions').modal('show');
-        })
-        $('#modelClose').on('click',function(){
-            $("#show_promotions").modal('hide')
+            if(promotions.length > 0){
+                $.each(promotions, function(key, value) {
+                    $('#show_promotions_'+key).modal('show');
+                    $('#modelClose_'+key).on('click',function(){
+                        $("#show_promotions_"+key).modal('hide')
+                    })
+                });
+                
+            }
         })
     </script>
     <script>
