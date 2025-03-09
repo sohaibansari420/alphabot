@@ -162,53 +162,81 @@
     <script>
         $(document).ready(function(){
             $('#compounding').prop('disabled', true);
-            $('#package_id').on('change',function(){
-                $('#compounding').prop('disabled', false);
-                var today = new Date(); // Get current date
-                var day = today.getDay(); // Get day of the week (0 = Sunday, 6 = Saturday)
-                
-                var selectedVal = $(this).val();
-                $('#plan_price').val('');
-                $('#plan_purchase').val('');
-                $('#trx').val('');
-                if (selectedVal !== "") {
-                    $.ajax({
-                        url: "{{ route('user.plan.roi.details') }}",
-                        type: 'GET',
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            planId : selectedVal,
-                        },
-                        success: function(data) {
-                            console.log(data);
-                            $('#plan_price').val(data.price);
-                            if (data.plan_roi == 1) {
-                                $('#plan_purchase').val(data.percentage);
-                            }
-                            else{
-                                $('#plan_purchase').val(0);
-                                alert('Package is with only points,so you don"t have the access to roi operation.')
-                            }
-                            $('#trx').val(data.trx);
-                            if ((day === 0 || day === 6 || (data.roi_status == 0 && data.plan_roi == 1 && data.planStartHours == 1))) {
-                                $('#compounding').prop('disabled', false);
-                            }else{
-                                $('#compounding').prop('disabled', true);   
-                            }
+        });
+        $(document).ready(function () {
+    function fetchPlanDetails() {
+        var selectedVal = $('#package_id').val();
+        if (selectedVal !== "") {
+            $.ajax({
+                url: "{{ route('user.plan.roi.details') }}",
+                type: 'GET',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    planId: selectedVal,
+                },
+                success: function (data) {
+                    console.log(data);
+                    $('#plan_price').val(data.price);
+                    $('#trx').val(data.trx);
+
+                    var today = new Date(); // Get current date
+                    var day = today.getDay(); // Get day of the week (0 = Sunday, 6 = Saturday)
+
+                    let storedData = JSON.parse(localStorage.getItem('planData')) || {};
+                    let lastUpdatedTime = storedData.timestamp || 0;
+                    let currentTime = new Date().getTime();
+                    
+                    console.log(currentTime,'--',lastUpdatedTime);
+
+                    if (data.plan_roi == 1) {
+                        // If forced update OR 5 minutes have passed, update the percentage
+                        if ((currentTime - lastUpdatedTime > 60000)) {
+                            storedData[selectedVal] = data.percentage;
+                            storedData.timestamp = currentTime;
+                            localStorage.setItem('planData', JSON.stringify(storedData));
                         }
-                    });
-                }
-                else{
-                    alert('Please Select the package first');
+
+                        // Set the percentage from stored data
+                        $('#plan_purchase').val(storedData[selectedVal]);
+                    } else {
+                        $('#plan_purchase').val(0);
+                        alert('Package is with only points, so you don\'t have access to ROI operation.');
+                    }
+
+                    // Manage the compounding button based on conditions
+                    if ((day === 0 || day === 6 || (data.roi_status == 0 && data.plan_roi == 1 && data.planStartHours == 1))) {
+                        $('#compounding').prop('disabled', false);
+                    } else {
+                        $('#compounding').prop('disabled', true);
+                    }
                 }
             });
+        } else {
+            alert('Please select the package first');
+        }
+    }
 
-            setInterval(function () {
-                if ($('#package_id').val() !== "") {
-                    $('#package_id').trigger('change'); // Manually trigger the event
-                }
-            }, 300000);
-        });
+    $('#package_id').on('change', function () {
+        $('#compounding').prop('disabled', false);
+        $('#plan_price').val('');
+        $('#plan_purchase').val('');
+        $('#trx').val('');
+        fetchPlanDetails(); // Force update on selection change
+    });
+
+    // Fetch details every 5 minutes
+    setInterval(function () {
+        if ($('#package_id').val() !== "") {
+            fetchPlanDetails(); // Update only if 5 minutes have passed
+        }
+    }, 60000);
+
+    // Load stored percentage on page load
+    if ($('#package_id').val() !== "") {
+        fetchPlanDetails();
+    }
+});
+
     </script>
 @endpush
 

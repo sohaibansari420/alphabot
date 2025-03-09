@@ -408,7 +408,7 @@ class PlanController extends Controller
         $endRangePer = unserialize($plan->plan->features)[0];
         preg_match('/([\d\.]+)%/', $endRangePer, $matches);
         $dailyIncome = isset($matches[1]) ? floatval($matches[1]) : 0.0;
-        $randomIncome = round(mt_rand(0, $dailyIncome * 100) / 100, 2);
+        $randomIncome = round(mt_rand(0.1, $dailyIncome * 100) / 100, 2);
 
         $currentTime = Carbon::now();
         $createPlan = Carbon::parse($plan->created_at)->format('y-m-d H:i');
