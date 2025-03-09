@@ -164,7 +164,7 @@
             $('#compounding').prop('disabled', true);
         });
         $(document).ready(function () {
-    function fetchPlanDetails() {
+    function fetchPlanDetails(forUpdate = false) {
         var selectedVal = $('#package_id').val();
         if (selectedVal !== "") {
             $.ajax({
@@ -190,7 +190,7 @@
 
                     if (data.plan_roi == 1) {
                         // If forced update OR 5 minutes have passed, update the percentage
-                        if ((currentTime - lastUpdatedTime > 60000)) {
+                        if (forUpdate || (currentTime - lastUpdatedTime > 300000)) {
                             storedData[selectedVal] = data.percentage;
                             storedData.timestamp = currentTime;
                             localStorage.setItem('planData', JSON.stringify(storedData));
@@ -227,9 +227,9 @@
     // Fetch details every 5 minutes
     setInterval(function () {
         if ($('#package_id').val() !== "") {
-            fetchPlanDetails(); // Update only if 5 minutes have passed
+            fetchPlanDetails(true); // Update only if 5 minutes have passed
         }
-    }, 60000);
+    }, 300000);
 
     // Load stored percentage on page load
     if ($('#package_id').val() !== "") {
