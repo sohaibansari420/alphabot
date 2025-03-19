@@ -381,6 +381,10 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('general-setting', 'GeneralSettingController@index')->name('setting.index');
         Route::post('general-setting', 'GeneralSettingController@update')->name('setting.update');
 
+        // Deposit Configuration
+        Route::get('deposit-configuration', 'GeneralSettingController@depositIndex')->name('deposit.index');
+        Route::post('deposit-configuration', 'GeneralSettingController@depositUpdate')->name('deposit.update');
+
         // Logo-Icon
         Route::get('setting/logo-icon', 'GeneralSettingController@logoIcon')->name('setting.logo_icon');
         Route::post('setting/logo-icon', 'GeneralSettingController@logoIconUpdate')->name('setting.logo_icon');
@@ -503,7 +507,7 @@ Route::name('user.')->prefix('user')->group(function () {
 
             //ROI Operations
             Route::get('/roi', 'PlanController@roi')->name('plan.roi.index');
-        Route::get('/roi-plan/details', 'PlanController@roiPlanDetails')->name('plan.roi.details');
+            Route::get('/roi-plan/details', 'PlanController@roiPlanDetails')->name('plan.roi.details');
             
 
             Route::post('/plan/storm/active', 'UserController@stormPlan')->name('storm.plan.active');

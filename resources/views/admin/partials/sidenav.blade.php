@@ -626,6 +626,13 @@
                     </div>
                 </li>
 
+                <li class="sidebar-menu-item {{ menuActive('admin.setting.index') }}">
+                    <a href="{{ route('admin.deposit.index') }}" class="nav-link">
+                        <i class="menu-icon las la-life-ring"></i>
+                        <span class="menu-title">@lang('Deposit Configuration')</span>
+                    </a>
+                </li>
+
                 <li class="sidebar__menu-header">@lang('Frontend Manager')</li>
 
                 <li class="sidebar-menu-item {{ menuActive('admin.frontend.templates') }}">
