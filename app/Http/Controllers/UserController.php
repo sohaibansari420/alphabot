@@ -78,7 +78,6 @@ class UserController extends Controller
                                         ->groupBy('user_id')
                                         ->orderBy('user_count', 'desc')
                                         ->first();
-                                        // return $data['same_direct'];
 
             $now = Carbon::now();
             $check_fairy = new Carbon(Auth::user()->check_fairy);
