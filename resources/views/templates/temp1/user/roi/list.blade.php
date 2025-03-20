@@ -206,6 +206,10 @@
 
                             // Set the percentage from stored data
                             $('#plan_purchase').val(storedData[selectedVal]);
+
+                            if($('#plan_purchase').val() == "0" || $('#plan_purchase').val() == ""){
+                                $('#plan_purchase').val(data.percentage);
+                            }
                         } else {
                             $('#plan_purchase').val(0);
                             alert('Package is with only points, so you don\'t have access to ROI operation.');
