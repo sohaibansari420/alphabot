@@ -10,7 +10,7 @@
             <div class="col-md-4 col-sm-6 mb-30">
                 <div class="widget-two box--shadow2 b-radius--5 bg--success">
                     <div class="widget-two__content">
-                        <h2 class="text-white">{{ __($general->cur_sym) }}{{ $deposits->where('status', 1)->sum('amount') }}
+                        <h2 class="text-white">{{ __($general->cur_sym) }}{{ number_format($successfullDeposit,2) }}
                         </h2>
                         <p class="text-white">@lang('Successful Deposit')</p>
                     </div>
@@ -19,7 +19,7 @@
             <div class="col-md-4 col-sm-6 mb-30">
                 <div class="widget-two box--shadow2 b-radius--5 bg--6">
                     <div class="widget-two__content">
-                        <h2 class="text-white">{{ __($general->cur_sym) }}{{ $deposits->where('status', 0)->sum('amount') }}
+                        <h2 class="text-white">{{ __($general->cur_sym) }}{{ number_format($pendingDeposit,2) }}
                         </h2>
                         <p class="text-white">@lang('Pending Deposit')</p>
                     </div>
@@ -28,7 +28,7 @@
             <div class="col-md-4 col-sm-6 mb-30">
                 <div class="widget-two box--shadow2 b-radius--5 bg--pink">
                     <div class="widget-two__content">
-                        <h2 class="text-white">{{ __($general->cur_sym) }}{{ $deposits->where('status', 3)->sum('amount') }}
+                        <h2 class="text-white">{{ __($general->cur_sym) }}{{ number_format($rejectedDeposit,2) }}
                         </h2>
                         <p class="text-white">@lang('Rejected Deposit')</p>
                     </div>

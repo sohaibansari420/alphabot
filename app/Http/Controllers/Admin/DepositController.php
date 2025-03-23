@@ -65,7 +65,10 @@ class DepositController extends Controller
         $page_title = 'Deposit History';
         $empty_message = 'No deposit history available.';
         $deposits = Deposit::with(['user', 'gateway'])->latest()->paginate(getPaginate());
-        return view('admin.deposit.log', compact('page_title', 'empty_message', 'deposits'));
+        $successfullDeposit = Deposit::where('status', 1)->sum('amount');
+        $pendingDeposit = Deposit::where('status', 0)->sum('amount');
+        $rejectedDeposit = Deposit::where('status', 3)->sum('amount');
+        return view('admin.deposit.log', compact('page_title', 'empty_message', 'deposits','successfullDeposit','pendingDeposit','rejectedDeposit'));
     }
 
     public function depViaMethod($method,$type = null){
