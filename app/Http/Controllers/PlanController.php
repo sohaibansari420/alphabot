@@ -422,18 +422,48 @@ class PlanController extends Controller
         $roi_status = Transaction::where(['commission_id' => 1, 'user_id' => Auth::id(), 'plan_trx' => $plan->trx])
                 ->whereDate('created_at', \Carbon\Carbon::today())
                 ->count();
-        
+
+        $midnight = Carbon::today()->startOfDay(); // 12:00 AM
+        $noon = Carbon::today()->midDay(); // 12:00 PM
+        $nextMidnight = Carbon::today()->endOfDay(); // 11:59:59 PM
+                    
+        // Check if current time is before or after 12 PM
+        if ($currentTime->lessThan($noon)) {
+            // If it's between 12 AM and 12 PM
+            $intervalHoursCheck = Transaction::where(['commission_id' => 1, 'user_id' => Auth::id(), 'plan_trx' => $plan->trx])
+                        ->whereDate('created_at', Carbon::today()) // Only today's transactions
+                        ->whereTime('created_at', '>=', $midnight->format('H:i:s'))
+                        ->whereTime('created_at', '<', $noon->format('H:i:s'))
+                        ->count();
+        } else {
+            // If it's between 12 PM and 12 AM
+            $intervalHoursCheck = Transaction::where(['commission_id' => 1, 'user_id' => Auth::id(), 'plan_trx' => $plan->trx])
+                        ->whereDate('created_at', Carbon::today()) // Only today's transactions
+                        ->whereTime('created_at', '>=', $noon->format('H:i:s'))
+                        ->whereTime('created_at', '<', $nextMidnight->format('H:i:s'))
+                        ->count();
+        }
         $createdAt = Carbon::parse($plan->created_at);
 
-        // Get the current time (March 19, 2025 12:45 AM)
-        $currentTime = Carbon::now(); 
-    
-        // Calculate the difference in hours and minutes
-        $diffInHours = $createdAt->diffInHours($currentTime);
-        $diffInMinutes = $createdAt->diffInMinutes($currentTime);
-    
-        // Calculate remaining time until 12:25 PM
-        $remainingTime = $currentTime->copy()->diffInSeconds($createdAt->copy()->addDay(), false);
+        // Get the current time
+        $currentTime = Carbon::now();
+        
+        // Get today's 12 AM and 12 PM
+        $midnight = Carbon::today()->startOfDay(); // 12:00 AM today
+        $noon = Carbon::today()->midDay(); // 12:00 PM today
+        $nextMidnight = Carbon::today()->endOfDay(); // 11:59:59 PM today
+        
+        // Time from 12 AM to 12 PM
+        $diff12AMto12PM = $midnight->diffInHours($noon); // Always 12 hours
+        
+        // Time from 12 PM to 12 AM
+        $diff12PMto12AM = $noon->diffInHours($nextMidnight); // Always 12 hours
+        
+        // If you want to calculate the remaining time until the next 12 PM
+        $remainingUntil12PM = $currentTime->diffInHours($noon, false); // Negative if past 12 PM
+        
+        // If you want the remaining time until the next 12 AM
+        $remainingUntil12AM = $currentTime->diffInHours($nextMidnight, false);
 
         $data = [
             'price' => $plan->amount,
@@ -444,14 +474,16 @@ class PlanController extends Controller
             'planStartHours' => $planStartHours,
             'type' => $plan->type,
             'plan_points' => $plan->with_point,
+            'intervalHoursCheck' => $intervalHoursCheck,
 
             'created_at' => $createdAt->format('Y-m-d H:i:s'),
             'current_time' => $currentTime->format('Y-m-d H:i:s'),
             'time_passed' => [
-                'hours' => floor($diffInMinutes / 60), 
-                'minutes' => $diffInMinutes % 60
+                'diff12AMto12PM' => $diff12AMto12PM,
+                'diff12PMto12AM' => $diff12PMto12AM,
+                'remainingUntil12PM' => $remainingUntil12PM,
+                'remainingUntil12AM' => $remainingUntil12AM,
             ],
-            'remaining_time' => gmdate("H:i:s", $remainingTime) // Format the remaining time
         ];
         return $data;
     }

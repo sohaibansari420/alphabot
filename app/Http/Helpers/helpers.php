@@ -999,7 +999,7 @@ function roiReturn($user_id = '', $is_compounding = '', $trx = '', $plan_purchas
         return ['error', 'Daily is off for this Plan'];
     }
 
-    if ($roi_status != 0) {
+    if ($roi_status > 1) {
         return ['error', 'Already received the Daily for this Plan'];
     }
 

@@ -216,7 +216,7 @@
                         }
 
                         // Manage the compounding button based on conditions
-                        if ((day === 0 || day === 6 || (data.roi_status == 0 && data.plan_roi == 1 && data.planStartHours == 1))) {
+                        if ((day === 0 || day === 6 || ((data.roi_status >= 0 && data.roi_status < 2) && data.plan_roi == 1 && data.planStartHours == 1 && data.intervalHoursCheck == 0))) {
                             $('#compounding').prop('disabled', false);
                             $('#clock_timer').addClass('d-none');
                         } else {
@@ -257,54 +257,56 @@
         
 
         function fetchTimeDifference(data) {
-                const timePassed = data.time_passed;
-                const remainingTime = data.remaining_time;
+            let currentTime = new Date();
+            let currentHour = currentTime.getHours(); // 24-hour format
+            let currentMinute = currentTime.getMinutes();
+            let currentSecond = currentTime.getSeconds();
 
-                // Display the time passed
-                $("#timePassed").text(`${timePassed.hours} hours ${timePassed.minutes} minutes`);
-                
-                // Start countdown from the remaining time (e.g., "11:32:13")
-                startCountdown(remainingTime);
+            let remainingHours, remainingMinutes, remainingSeconds;
+
+            // Determine whether to count down to 12PM or 12AM
+            if (currentHour < 12) {
+                remainingHours = data.time_passed.remainingUntil12PM;
+            } else {
+                remainingHours = data.time_passed.remainingUntil12AM;
+            }
+
+            // Calculate exact remaining minutes and seconds
+            remainingMinutes = 59 - currentMinute;
+            remainingSeconds = 59 - currentSecond;
+
+            // Convert to total remaining seconds
+            let totalSeconds = (remainingHours * 3600) + (remainingMinutes * 60) + remainingSeconds;
+
+            startCountdown(totalSeconds);
         }
 
-        // Function to start countdown from remaining time
-        function startCountdown(remainingTime) {
-            let timeArray = remainingTime.split(":"); // Split remaining time into [hours, minutes, seconds]
-            let hours = parseInt(timeArray[0]);
-            let minutes = parseInt(timeArray[1]);
-            let seconds = parseInt(timeArray[2]);
+        // Function to start countdown
+        function startCountdown(totalSeconds) {
+            clearInterval(countdownInterval); // Clear any existing countdown
 
-            countdownInterval = setInterval(function() {
-                // Decrease the seconds
-                if (seconds > 0) {
-                    seconds--;
-                } else if (minutes > 0) {
-                    minutes--;
-                    seconds = 59;
-                } else if (hours > 0) {
-                    hours--;
-                    minutes = 59;
-                    seconds = 59;
-                }
+            countdownInterval = setInterval(function () {
+                let hours = Math.floor(totalSeconds / 3600);
+                let minutes = Math.floor((totalSeconds % 3600) / 60);
+                let seconds = totalSeconds % 60;
 
-                // Update the displayed countdown time
-                $("#timeRemaining").text(
-                    `${padTime(hours)}:${padTime(minutes)}:${padTime(seconds)}`
-                );
+                // Update the countdown timer display
+                $("#timeRemaining").text(`${padTime(hours)}:${padTime(minutes)}:${padTime(seconds)}`);
 
-                // If time is up, stop the countdown
-                if (hours === 0 && minutes === 0 && seconds === 0) {
+                if (totalSeconds > 0) {
+                    totalSeconds--;
+                } else {
                     clearInterval(countdownInterval);
-                    $("#timeRemaining").text("Time's up!");
+                    $("#timeRemaining").text("Time's up! Executing function...");
+                    executeYourFunction(); // Call your function when countdown ends
                 }
-            }, 1000); // Update every second
+            }, 1000);
         }
 
-        // Function to pad the time with leading zeros
-        function padTime(time) {
-            return time < 10 ? "0" + time : time;
-        }
-   
+            // Function to pad time with leading zeros
+            function padTime(time) {
+                return time < 10 ? "0" + time : time;
+            }
 
     </script>
 @endpush
