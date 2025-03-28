@@ -89,7 +89,7 @@ class RegisterController extends Controller
                 $notify[] = ['error', 'Invalid referral position'];
                 return redirect()->route('home')->withNotify($notify);
             }
-
+            
             $pos = getPosition($ref_user->id, $position);
 
             $join_under = User::find($pos['pos_id']);
@@ -148,19 +148,19 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
 
-        $validate = Validator::make($data, [
-            'referral'      => 'required|string|max:160',
-            'position'      => 'required|integer',
-            'firstname'     => 'sometimes|required|string|max:60',
-            'lastname'      => 'sometimes|required|string|max:60',
-            'email'         => 'required|string|email|max:160|unique:users',
-            // 'legacy_email'  => 'required|string|email|max:160|unique:users',
-            'mobile'        => 'required|string|max:30',
-            'password'      => 'required|string|min:6|confirmed',
-            'username'      => 'required|alpha_num|unique:users|min:3',
-            'captcha'       => 'sometimes|required',
-            'country_code'  => 'required'
-        ]);
+            $validate = Validator::make($data, [
+                'referral'      => 'required|string|max:160',
+                'position'      => 'required|integer',
+                'firstname'     => 'sometimes|required|regex:/^[A-Za-z]+$/|max:60',
+                'lastname'      => 'sometimes|required|regex:/^[A-Za-z]+$/|max:60',
+                'email'         => 'required|string|email|max:160|unique:users',
+                // 'legacy_email'  => 'required|string|email|max:160|unique:users',
+                'mobile'        => 'required|string|max:30',
+                'password'      => 'required|string|min:6|confirmed',
+                'username'      => 'required|alpha_num|unique:users|min:3',
+                'captcha'       => 'sometimes|required',
+                'country_code'  => 'required'
+            ]);
 
         return $validate;
     }

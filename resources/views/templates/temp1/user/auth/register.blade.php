@@ -59,14 +59,14 @@
                                     <label>
                                         First Name *
                                     </label>
-                                    <input type="text" name="firstname" value="{{ old('firstname') }}" placeholder="@lang('Enter your first name')" autofocus required>
+                                    <input type="text" name="firstname" value="{{ old('firstname') }}" pattern="[A-Za-z]+" placeholder="@lang('Enter your first name')" autofocus required>
                                 </fieldset> 
 
                                 <fieldset>
                                     <label>
                                         Last Name *
                                     </label>
-                                    <input type="text" name="lastname" value="{{ old('lastname') }}" placeholder="@lang('Enter your last name')" required>
+                                    <input type="text" name="lastname" value="{{ old('lastname') }}" pattern="[A-Za-z]+" placeholder="@lang('Enter your last name')" required>
                                 </fieldset> 
 
                                 <fieldset>
