@@ -39,13 +39,15 @@
                                     <p style="color:white;"><span id="timeRemaining">00:00:00</span></p>
                                 </div>
                             </div>
-                        </div>
+                        </div>)
                         <div class="form-group col-md-12 mb-4">
                             <label class="font-weight-bold">@lang('Packages')</label>
                             <select class="form-control wallet_id" name="plan_id" id="package_id">
                                 <option value="">Select your plan</option>
                                 @foreach ($myPLans as $data)
-                                    <option value="{{ $data->id }}">{{ trans($data->plan->name) }}</option>
+                                    @if($data->plan->title != "Card")  
+                                        <option value="{{ $data->id }}">{{ trans($data->plan->name) }}</option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>  
