@@ -700,35 +700,6 @@
             </div>
         </div>
     </div>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-xl-10 wow fadeInUp" data-wow-delay="1.2s">
-                <div class="card shadow-lg">
-                    <div class="card-header text-center bg-primary text-white">
-                        <h1>Card Details</h1>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            @foreach ($purchased_card as $plans)
-                                <div class="col-md-6 mb-4">
-                                    <div class="card border-0 shadow-sm">
-                                        <div class="card-body text-center">
-                                            <img src="{{ asset('assets/images/plan/'.$plans->plan->image) }}" 
-                                                 class="img-fluid rounded mb-3" 
-                                                 style="max-height: 200px; object-fit: cover;" 
-                                                 alt="Promotion Image" />
-                                            <h5 class="font-weight-semibold mb-1">{{ $plans->plan->name }}</h5>
-                                            <p class="text-muted">{{ $general->cur_sym }}{{ $plans->amount }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 @endif
 <!--End row-->
 @if(count($promotions) > 0 )
