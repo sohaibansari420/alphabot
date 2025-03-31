@@ -39,7 +39,7 @@ class PlanController extends Controller
     }
 
     public function planDetails(Request $request){
-        $data['page_title'] = "Packages Details";
+        $data['page_title'] = ($request->title == "Card")? "Card Details":"Packages Details";
         $data['plans'] = Plan::whereStatus(1)->where('title',$request->title)->orderBy('price')->get();
         $data['myPlans'] = PurchasedPlan::where('user_id', Auth::id())->get();
         $data['myPlansAmounts'] = PurchasedPlan::where('user_id', Auth::id())->pluck('amount')->toArray();
@@ -54,6 +54,10 @@ class PlanController extends Controller
         
         $package = Plan::where('id', $request->plan_id)->where('status', 1)->firstOrFail();
         $user = User::find(Auth::id());
+
+        if($package->title == "Card"){
+   
+        };
         $ref_id = getReferenceId(Auth::id());
         $trx = getTrx();
         
@@ -67,18 +71,22 @@ class PlanController extends Controller
                 $notify[] = ['error', 'Insufficient Balance'];
                 return back()->withNotify($notify);
             }
-            
             $details = $user->username . ' Subscribed to ' . $package->name . ' plan';
+            if($package->title == "Card"){
+                $details = $user->username . ' Buy ' . $package->name . ' card';
+            };
         
             $notify[] = updateWallet($user->id, $trx, 1, NULL, '-', getAmount($package->price), $details, 0, 'purchased_plan', NULL,'');
+            if($package->title != "Card"){
+                $oldPlan = $user->plan_purchased;
+                $user->plan_purchased = 1;
+                $user->save();
+                
+                if ($oldPlan == 0){
+                    updatePaidCount($user->id);
+                }
+            };
     
-            $oldPlan = $user->plan_purchased;
-            $user->plan_purchased = 1;
-            $user->save();
-    
-            if ($oldPlan == 0){
-                updatePaidCount($user->id);
-            }
     
             PurchasedPlan::create([
                 'user_id' => $user->id,

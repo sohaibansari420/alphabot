@@ -62,8 +62,8 @@
                                                 <button type="submit" name="plan_id" value="{{ $data->id }}"
                                                     class="btn btn-primary float-end">
                                                     @lang('Confirm')</button>
-                                                <button type="button" class="btn btn-success" data-bs-target="#confUpgradeModal{{ $data->id }}"
-                                                    data-bs-toggle="modal">Upgrade Plan</button>
+                                                {{-- <button type="button" class="btn btn-success" data-bs-target="#confUpgradeModal{{ $data->id }}"
+                                                    data-bs-toggle="modal">Upgrade Plan</button> --}}
                                             </div>
                                         </form>
                                     </div>
