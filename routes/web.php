@@ -552,6 +552,8 @@ Route::name('user.')->prefix('user')->group(function () {
             Route::get('deposit/manual', 'Gateway\PaymentController@manualDepositConfirm')->name('deposit.manual.confirm');
             Route::post('deposit/manual', 'Gateway\PaymentController@manualDepositUpdate')->name('deposit.manual.update');
             Route::get('deposit/history', 'UserController@depositHistory')->name('deposit.history');
+            Route::post('deposit/screenshot', 'Gateway\PaymentController@depositScreenshot')->name('deposit.screenshot');
+            
 
             // Withdraw
             Route::get('/withdraw', 'UserController@withdrawMoney')->name('withdraw');

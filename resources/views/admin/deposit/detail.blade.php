@@ -1,6 +1,19 @@
 @extends('admin.layouts.app')
 @section('panel')
     <div class="row mb-none-30">
+        <div class="col-xl-12 col-lg-8 col-md-10 mx-auto mb-3">
+            <div class="card b-radius--10 overflow-hidden box--shadow1 shadow-lg border-0">
+                <div class="card-body text-center p-4">
+                    <h5 class="mb-4 text-muted">@lang('Deposit Screenshot')</h5>
+                    <div class="bg-light p-3 rounded">
+                        <img src="{{ asset($deposit->image) }}" 
+                             alt="@lang('Screenshot')" 
+                             class="img-fluid rounded shadow-sm deposit-imgView" 
+                             style="max-width: 100%; height: auto;">
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="col-xl-4 col-md-6 mb-30">
             <div class="card b-radius--10 overflow-hidden box--shadow1">
                 <div class="card-body">

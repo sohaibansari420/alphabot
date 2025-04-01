@@ -20,4 +20,27 @@
             </div>
         </div>
     </div>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0 rounded-lg text-center">
+                <div class="card-body p-4">
+                    <h4 class="mb-4 font-weight-bold">@lang('PLEASE ATTACH SCREENSHOT OF YOUR DEPOSIT')</h4>
+                    <form action="{{ route('user.deposit.screenshot')}}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="id" value="{{ $deposit->id }}">
+    
+                        <div class="mb-3">
+                            <label for="screenshot" class="form-label font-weight-bold">@lang('Select Image')</label>
+                            <input type="file" class="form-control" id="screenshot"
+                                   accept=".png, .jpg, .jpeg, .svg, .gif" name="screenshot" required>
+                        </div>
+    
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">@lang('Add Screenshot')</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

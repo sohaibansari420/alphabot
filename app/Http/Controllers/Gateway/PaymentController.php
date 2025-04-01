@@ -12,6 +12,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Session;
+use Image;
 
 class PaymentController extends Controller
 {
@@ -178,6 +179,39 @@ class PaymentController extends Controller
             ]);
 
         }
+    }
+
+    public function depositScreenshot(Request $request) {
+        $request->validate([
+            'screenshot' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+    
+        $deposit = Deposit::find($request->id);
+        if (!$deposit) {
+            return back()->withErrors(['error' => 'Deposit not found!']);
+        }
+    
+        $user = Auth::user();
+    
+        if ($request->hasFile('screenshot')) {
+            $image = $request->file('screenshot');
+            $filename = time() . '_' . $user->username . '.' . $image->getClientOriginalExtension();
+            $path = 'assets/deposit/screenshot/';
+    
+            // Delete old image if exists
+            if ($deposit->image && file_exists(public_path($deposit->image))) {
+                unlink(public_path($deposit->image));
+            }
+    
+            // Move new image to public path
+            $image->move(public_path($path), $filename);
+    
+            // Update database
+            $deposit->image = $path . $filename;
+            $deposit->save();
+        }
+    
+        return back()->with('success', 'Screenshot updated successfully.');
     }
 
     public function manualDepositConfirm()
