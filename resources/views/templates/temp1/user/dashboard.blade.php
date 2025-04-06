@@ -248,9 +248,9 @@
     </div>
     <div class="col-xl-8 wow fadeInUp" data-wow-delay="1.3s">
         @php
-            $now = \Carbon\Carbon::now();
-            $created = new \Carbon\Carbon(auth()->user()->check_fairy);
-            $rem_days = $commissions[3]->commissionDetail[0]->days - $created->diffInDays($now);
+            $now = \Carbon\Carbon::now()->format('Y-m-d');
+            $created = \Carbon\Carbon::parse(auth()->user()->check_fairy)->format('Y-m-d');
+            $rem_days = $commissions[3]->commissionDetail[0]->days - \Carbon\Carbon::parse($created)->diffInDays(\Carbon\Carbon::parse($now));
             if($rem_days < 0){
                 $rem_days = 0;
             }
