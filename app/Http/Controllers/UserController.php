@@ -79,7 +79,7 @@ class UserController extends Controller
         if(getUserLowerPlan(Auth::id())){
             $data['same_direct']    = UserFamily::selectRaw('user_id, COUNT(*) as user_count')
                                         ->whereRaw('user_id = ' . Auth::id() . ' and level = 1 and plan_id >= ' . getUserLowerPlan(Auth::id())->plan_id)
-                                        ->where('created_at','>=', Carbon::parse(Auth::user()->check_fairy))
+                                        ->where('created_at','>=', Carbon::parse(Auth::user()->check_fairy)->format('Y-m-d'))
                                         ->groupBy('user_id')
                                         ->orderBy('user_count', 'desc')
                                         ->first();
