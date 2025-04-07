@@ -84,12 +84,10 @@ class UserController extends Controller
                                         ->orderBy('user_count', 'desc')
                                         ->first();
 
-            $now = Carbon::now();
-            $check_fairy = new Carbon(Auth::user()->check_fairy);
-            $rem_days = $data['commissions'][4]->commissionDetail[0]->days - $check_fairy->diffInDays($now);
-
-            if (@$data['same_direct']->user_count >= $data['commissions'][4]->commissionDetail[0]->direct && $rem_days > 0) {
-
+            $now = Carbon::now()->format("Y-m-d");
+            $check_fairy = Carbon::parse(Auth::user()->check_fairy)->format("Y-m-d");
+            $rem_days = $data['commissions'][3]->commissionDetail[0]->days - (carbon::parse($check_fairy))->diffInDays(carbon::parse($now));
+            if (@$data['same_direct']->user_count >= $data['commissions'][3]->commissionDetail[0]->direct && $rem_days > 0) {
                 cashbackCommission(Auth::user());
             }
 
