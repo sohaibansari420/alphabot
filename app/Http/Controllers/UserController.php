@@ -92,7 +92,7 @@ class UserController extends Controller
             $rem_days = $data['commissions'][3]->commissionDetail[0]->days - (carbon::parse($check_fairy))->diffInDays(carbon::parse($now));
             if (@$data['same_direct']->user_count >= $data['commissions'][3]->commissionDetail[0]->direct && $rem_days >= 0) {
                 cashbackCommission(Auth::user());
-            }
+            } 
 
             // if ($rem_days < 0) {
 
