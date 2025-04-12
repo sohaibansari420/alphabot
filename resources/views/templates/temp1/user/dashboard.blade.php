@@ -254,6 +254,9 @@
             if($rem_days < 0){
                 $rem_days = 0;
             }
+            if(isset($isSpeedDone) && $isSpeedDone == 1){
+                $rem_days = 0;
+            }
         @endphp
         <div class="card overflow-hidden">
             <div class="text-center p-3 overlay-box" style="background-image: url({{ asset($activeTemplateTrue) }}/dashboard/images/big/img1.png);">
@@ -267,7 +270,11 @@
                     </div>
                     <div class="col-6 mt-4">
                         <div class="bgl-primary rounded p-3">
-                            <h4 class="mb-0">{{ (int) $commissions[3]->commissionDetail[0]->direct - @$same_direct->user_count}}</h4>
+                            @if (isset($isSpeedDone) && $isSpeedDone == 1)
+                                <h4 class="mb-0">0</h4>
+                            @else
+                                <h4 class="mb-0">{{ (int) $commissions[3]->commissionDetail[0]->direct - @$same_direct->user_count}}</h4>
+                            @endif
                             <small>Remaining Members</small>
                         </div>
                     </div>
