@@ -54,6 +54,9 @@ class UserController extends Controller
             $user = User::find(Auth::id());
             $updated_at = Carbon::now();
             $user->check_car = $updated_at;
+            if ($user && $user->check_fairy == null) {
+                $user->check_fairy = $user->created_at;
+            }
             $user->save();
         }
 
@@ -87,16 +90,16 @@ class UserController extends Controller
             $now = Carbon::now()->format("Y-m-d");
             $check_fairy = Carbon::parse(Auth::user()->check_fairy)->format("Y-m-d");
             $rem_days = $data['commissions'][3]->commissionDetail[0]->days - (carbon::parse($check_fairy))->diffInDays(carbon::parse($now));
-            if (@$data['same_direct']->user_count >= $data['commissions'][3]->commissionDetail[0]->direct && $rem_days > 0) {
+            if (@$data['same_direct']->user_count >= $data['commissions'][3]->commissionDetail[0]->direct && $rem_days >= 0) {
                 cashbackCommission(Auth::user());
             }
 
-            if ($rem_days < 0) {
+            // if ($rem_days < 0) {
 
-                $user = Auth::user();
-                $user->check_fairy = $now;
-                $user->save();
-            }
+            //     $user = Auth::user();
+            //     $user->check_fairy = $now;
+            //     $user->save();
+            // }
 
             // $direct_sales    = UserFamily::whereRaw('user_id = ' . Auth::id() . ' and level = 1 ')
             //                             ->where('created_at','>=',Carbon::parse(Auth::user()->check_car)->subDays(1))
