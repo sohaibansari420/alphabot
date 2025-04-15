@@ -263,42 +263,65 @@
                 <h3 class="mt-3 mb-1 text-white">{{ $commissions[3]->name }}</h3>
                 <p class="text-white mb-2">Join The Stealth Trade Bot, earn cash back, sponsor 5 members with in 15 days,<br/> unlock earning potential. Financial freedom awaits!</p>
             </div>
-            <div class="card-body">
-                <div class="row text-center">
-                    <div class="col-12">
-                        <p class="mb-0 fs-15">The Stealth Trade Bot Speed Bonus rewards new members of The Stealth Trade Bot ecosystem who sponsor 5 members within the first 15 days of joining. These members must have the same or greater value than your joining package.</p>
-                    </div>
-                    <div class="col-6 mt-4">
-                        <div class="bgl-primary rounded p-3">
-                            @if (isset($isSpeedDone) && $isSpeedDone == 1)
-                                <h4 class="mb-0">0</h4>
-                            @else
-                                <h4 class="mb-0">{{ (int) $commissions[3]->commissionDetail[0]->direct - @$same_direct->user_count}}</h4>
-                            @endif
-                            <small>Remaining Members</small>
-                        </div>
-                    </div>
-                    <div class="col-6 mt-4">
-                        <div class="bgl-primary rounded p-3">
-                            <h4 class="mb-0">{{ getAmount($rem_days) }}</h4>
-                            <small>Remaining Days</small>
+            @if (isset($isSpeedDone) && $isSpeedDone == 1)
+                <div class="card-body py-5">
+                    <div class="row justify-content-center text-center">
+                        <div class="col-md-8">
+                            <h3 class="text-success fw-bold mb-3">Congratulations! 🎉</h3>
+                            <p class="fs-5 text-muted mb-0">You’ve successfully achieved your speed bonus. Keep up the great work!</p>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="card-footer border-0 mt-0 text-center">		
-                <div class="row">
-                    <div class="col-12">
-                        <div class="d-flex justify-content-between">
-                            <h6>{{ @$same_direct->user_count / $commissions[3]->commissionDetail[0]->direct * 100 }}%</h6>
-                            <span>Direct Members</span>
-                        </div>
-                        <div class="progress">
-                            <div class="progress-bar bg-primary" style="width: {{ @$same_direct->user_count / $commissions[3]->commissionDetail[0]->direct * 100 }}%"></div>
+            @elseif ((isset($speedDays) && $speedDays > 15) && (!isset($isSpeedDone) || $isSpeedDone == 0))
+                <div class="card-body py-5">
+                    <div class="row justify-content-center text-center">
+                        <div class="col-md-8">
+                            <h3 class="text-danger fw-bold mb-3">Sorry 🚫</h3>
+                            <p class="fs-5 text-muted mb-0">
+                                Your chance to claim the speed bonus has ended. <br>
+                                You can create a new account to try again and earn the bonus.
+                            </p>
                         </div>
                     </div>
-                </div>						
-            </div>
+                </div>                            
+            @else
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-12">
+                            <p class="mb-0 fs-15">The Stealth Trade Bot Speed Bonus rewards new members of The Stealth Trade Bot ecosystem who sponsor 5 members within the first 15 days of joining. These members must have the same or greater value than your joining package.</p>
+                        </div>
+                        <div class="col-6 mt-4">
+                            <div class="bgl-primary rounded p-3">
+                                @if (isset($isSpeedDone) && $isSpeedDone == 1)
+                                    <h4 class="mb-0">0</h4>
+                                @else
+                                    <h4 class="mb-0">{{ (int) $commissions[3]->commissionDetail[0]->direct - @$same_direct->user_count}}</h4>
+                                @endif
+                                <small>Remaining Members</small>
+                            </div>
+                        </div>
+                        <div class="col-6 mt-4">
+                            <div class="bgl-primary rounded p-3">
+                                <h4 class="mb-0">{{ getAmount($rem_days) }}</h4>
+                                <small>Remaining Days</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer border-0 mt-0 text-center">		
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="d-flex justify-content-between">
+                                <h6>{{ @$same_direct->user_count / $commissions[3]->commissionDetail[0]->direct * 100 }}%</h6>
+                                <span>Direct Members</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-primary" style="width: {{ @$same_direct->user_count / $commissions[3]->commissionDetail[0]->direct * 100 }}%"></div>
+                            </div>
+                        </div>
+                    </div>						
+                </div>
+            @endif
         </div>
     </div>
 </div>

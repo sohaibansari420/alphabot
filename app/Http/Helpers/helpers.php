@@ -1430,7 +1430,7 @@ function cashbackCommission(User $user)
         $amount = ($com->percent / 100) * $user_plan_release->plan->price;
         updateCommissionWithLimit($user->id, $amount, $com->commission->wallet_id, $commission->id, $general->sitename, $com->commission_limit, $user_plan->trx);
 
-        $user->check_fairy = Carbon::now();
+        // $user->check_fairy = Carbon::now();
         $user->save();
     }
 }
