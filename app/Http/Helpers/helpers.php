@@ -2583,7 +2583,13 @@ function checkSponsorWithdraw($id = '')
             }
         }
 
-        if (($general->user1_detail * $plan_price) <= $total_direct_sale) {
+        if($plan_price->plan_limit != null){
+            $planLimit = $plan_price->plan_limit;
+        }
+        else{
+            $planLimit = $general->user1_detail;
+        }
+        if (($planLimit * $plan_price) <= $total_direct_sale) {
             return 1;
         } else {
             return 0;
