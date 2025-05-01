@@ -416,7 +416,15 @@ class PlanController extends Controller
         $endRangePer = unserialize($plan->plan->features)[0];
         preg_match('/([\d\.]+)%/', $endRangePer, $matches);
         $dailyIncome = isset($matches[1]) ? floatval($matches[1]) : 0.0;
-        $randomIncome = round(mt_rand(0.1, $dailyIncome * 100) / 100, 2);
+
+        $transac = Transaction::where(['commission_id' => 1, 'user_id' => Auth::id(), 'plan_trx' => $plan->trx])
+                ->whereDate('created_at', \Carbon\Carbon::today())->first();
+        if (isset($transac) && $transac->roi_percent) {
+            $dailyIncome = $dailyIncome - $transac->roi_percent;
+            $randomIncome = round(mt_rand(0.1, $dailyIncome * 100) / 100, 2);
+        }else{
+            $randomIncome = round(mt_rand(0.1, $dailyIncome * 100) / 100, 2);
+        } 
 
         $currentTime = Carbon::now();
         $createPlan = Carbon::parse($plan->created_at)->format('y-m-d H:i');
