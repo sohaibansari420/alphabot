@@ -1,9 +1,19 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Http;
 
 Route::get('/clear', function(){
     \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+});
+
+Route::get('/bitcoin-price', function () {
+    $response = Http::get('https://api.coingecko.com/api/v3/simple/price', [
+        'ids' => 'bitcoin',
+        'vs_currencies' => 'usd',
+    ]);
+
+    return $response->json();
 });
 
 /*
@@ -561,7 +571,6 @@ Route::name('user.')->prefix('user')->group(function () {
             Route::get('/withdraw/preview', 'UserController@withdrawPreview')->name('withdraw.preview');
             Route::post('/withdraw/preview', 'UserController@withdrawSubmit')->name('withdraw.submit');
             Route::get('/withdraw/history', 'UserController@withdrawLog')->name('withdraw.history');
-
         });
     });
 });

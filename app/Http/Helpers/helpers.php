@@ -1691,6 +1691,23 @@ function showTreePage($id)
     return $res;
 }
 
+function getDownlineUsers($id)
+{
+    $downlines = [];
+
+    $user = getUserById($id);
+    if ($user) {
+        foreach ([1, 2] as $position) {
+            $child = getPositionUser($id, $position);
+            if ($child) {
+                $downlines[] = $child;
+                $downlines = array_merge($downlines, getDownlineUsers($child->id));
+            }
+        }
+    }
+    return $downlines;
+}
+
 function showSingleUserinTreeUser($user)
 {
     $res = '';
@@ -2574,7 +2591,8 @@ function checkSponsorWithdraw($id = '')
     if ($paid_account > 0) {
         return 1;
     } else {
-        $plan_price = PurchasedPlan::where('user_id', $id)->where('type', 'sponsor')->first()->amount;
+        $plan = PurchasedPlan::where('user_id', $id)->where('type', 'sponsor')->first();
+        $plan_price = $plan->amount;
         $direct_sales = UserFamily::whereRaw('user_id = ' . Auth::id() . ' and level = 1 ')->get();
         $total_direct_sale = 0;
         foreach ($direct_sales as $direct_sale) {
@@ -2583,8 +2601,8 @@ function checkSponsorWithdraw($id = '')
             }
         }
 
-        if($plan_price->plan_limit != null){
-            $planLimit = $plan_price->plan_limit;
+        if($plan->plan_limit != null){
+            $planLimit = $plan->plan_limit;
         }
         else{
             $planLimit = $general->user1_detail;

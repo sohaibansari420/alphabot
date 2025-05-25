@@ -749,41 +749,82 @@ class UserController extends Controller
     }
 
 
-    function indexTransfer()
+    function indexTransfer(Request $request)
     {
+        $users = null;
+        $transferWallet = $request->walletID;
+        $user = User::find(Auth::id());
+        if ($transferWallet == 1) {
+            $downlineUsers = getDownlineUsers($user->id);
+            $ref_user = getUserById($user->ref_id);
+
+            $users = array_merge([$ref_user], $downlineUsers);
+            // return $mergedUsers;
+        }
         $wallets = UserWallet::where(["user_id" => Auth::user()->id])->where('status', 1)->get();
         $page_title = 'Balance Transfer';
-        return view($this->activeTemplate . '.user.balanceTransfer', compact('page_title', 'wallets'));
+        return view($this->activeTemplate . '.user.balanceTransfer', compact('page_title', 'wallets','transferWallet','users'));
     }
     
-    function balanceTransfer(Request $request)
-    {
-        $this->validate($request, [
-            'wallet_id' => 'required',
-            'amount' => 'required|numeric|min:0',
-        ]);
-        $gnl = GeneralSetting::first();
-        $user = User::find(Auth::id());
-        $user_wallet = UserWallet::where('user_id', $user->id)->where('wallet_id', $request->wallet_id)->firstOrFail();
-        $transfer_wallet = UserWallet::where('user_id', $user->id)->where('wallet_id', 3)->firstOrFail();
-        $charge = ($request->amount * $gnl->bal_trans_fixed_charge) / 100;
-        $amount = $request->amount;
-        $total = $amount - $charge;
+    function balanceTransfer(Request $request){
+        if(isset($request->user_id) && $request->user_id != null){
+            $this->validate($request, [
+                'user_id' => 'required',
+                'amount' => 'required|numeric|min:0',
+            ]);
+            $userID = $request->user_id;
+            $gnl = GeneralSetting::first();
+            $user = User::find(Auth::id());
+            $user_wallet = UserWallet::where('user_id', $user->id)->where('wallet_id', $request->transfer_wallet)->firstOrFail();
+            $transfer_wallet = UserWallet::where('user_id', $userID)->where('wallet_id', $request->transfer_wallet)->firstOrFail();
+            $charge = 0;//($request->amount * $gnl->bal_trans_fixed_charge) / 100;
+            $amount = $request->amount;
+            $total = $amount - $charge;
 
-        if ($user_wallet->balance >= $amount) {
+            if ($user_wallet->balance >= $amount) {
 
-            $trx = getTrx();
+                $trx = getTrx();
 
-            $notify[] = updateWallet($user->id, $trx, $user_wallet->wallet_id, NULL, '-', getAmount($amount), 'Balance Transferred To ' . $transfer_wallet->wallet->name, 0, 'transfer_balance', NULL,NULL);
+                $notify[] = updateWallet($user->id, $trx, $user_wallet->wallet_id, NULL, '-', getAmount($amount), 'Balance Transferred To ' . $transfer_wallet->user->username, 0, 'user_transfer_balance', NULL,NULL);
 
-            $notify[] = updateWallet($user->id, $trx, $transfer_wallet->wallet_id, NULL, '+', getAmount($total), 'Balance Received From ' . $user_wallet->wallet->name, $charge, 'receive_balance', NULL,NULL);
+                $notify[] = updateWallet($userID, $trx, $transfer_wallet->wallet_id, NULL, '+', getAmount($total), 'Balance Received From ' . $user_wallet->user->username, $charge, 'user_receive_balance', NULL,NULL);
 
-            $notify[] = ['success', 'Balance Transferred Successfully.'];
-            return back()->withNotify($notify);
-        } else {
-            $notify[] = ['error', 'Insufficient Balance.'];
-            return back()->withNotify($notify);
+                $notify[] = ['success', 'Balance Transferred Successfully.'];
+                return back()->withNotify($notify);
+            } else {
+                $notify[] = ['error', 'Insufficient Balance.'];
+                return back()->withNotify($notify);
 
+            }
+        }
+        else{
+            $this->validate($request, [
+                'wallet_id' => 'required',
+                'amount' => 'required|numeric|min:0',
+            ]);
+            $gnl = GeneralSetting::first();
+            $user = User::find(Auth::id());
+            $user_wallet = UserWallet::where('user_id', $user->id)->where('wallet_id', $request->transfer_wallet)->firstOrFail();
+            $transfer_wallet = UserWallet::where('user_id', $user->id)->where('wallet_id', $request->wallet_id)->firstOrFail();
+            $charge = 0;//($request->amount * $gnl->bal_trans_fixed_charge) / 100;
+            $amount = $request->amount;
+            $total = $amount - $charge;
+
+            if ($user_wallet->balance >= $amount) {
+
+                $trx = getTrx();
+
+                $notify[] = updateWallet($user->id, $trx, $user_wallet->wallet_id, NULL, '-', getAmount($amount), 'Balance Transferred To ' . $transfer_wallet->wallet->name, 0, 'transfer_balance', NULL,NULL);
+
+                $notify[] = updateWallet($user->id, $trx, $transfer_wallet->wallet_id, NULL, '+', getAmount($total), 'Balance Received From ' . $user_wallet->wallet->name, $charge, 'receive_balance', NULL,NULL);
+
+                $notify[] = ['success', 'Balance Transferred Successfully.'];
+                return back()->withNotify($notify);
+            } else {
+                $notify[] = ['error', 'Insufficient Balance.'];
+                return back()->withNotify($notify);
+
+            }
         }
     }
 

@@ -23,18 +23,22 @@
                             <div class="col-md-12 text-center">
                                 <a href="{{ route('user.report.wallet') }}?walletID={{ $wallet->wallet->id }}"
                                     class="btn btn-primary btn-sm">Logs</a>
+                                    <a href="{{ route('user.balance.transfer') }}?walletID={{ $wallet->wallet->id }}"
+                                            class="btn btn-primary btn-sm">
+                                            @if($wallet->wallet->id == 1) Withdraw @else Transfer @endif</a>
                                 @if ($wallet->wallet->withdraw)
                                     @if($wallet->wallet->id == 3)
                                         @if(\Carbon\Carbon::now()->dayOfWeek == \Carbon\Carbon::SATURDAY)
-                                            <a href="{{ route('user.withdraw') }}?walletID={{ $wallet->wallet->id }}"
+                                            {{-- <a href="{{ route('user.withdraw') }}?walletID={{ $wallet->wallet->id }}"
                                                 class="btn btn-primary btn-sm">
-                                                Withdraw</a>
+                                                Withdraw</a> --}}
                                         @endif
                                     @else
-                                        <a href="{{ route('user.withdraw') }}?walletID={{ $wallet->wallet->id }}"
+                                        {{-- <a href="{{ route('user.withdraw') }}?walletID={{ $wallet->wallet->id }}"
                                             class="btn btn-primary btn-sm">
-                                            Withdraw</a>
+                                            Withdraw</a> --}}
                                     @endif
+
                                 @endif
                                 @if ($wallet->wallet->deposit)
                                     <a href="{{ route('user.deposit') }}"

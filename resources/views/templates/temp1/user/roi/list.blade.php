@@ -79,7 +79,7 @@
                                     <p><strong>COIN:</strong> USDT</p>
                                     <p><strong>ACQUISITIONS:</strong> USDT</p>
                                     <p><strong>BROKER:</strong> BitcoinToYou</p>
-                                    <p><strong>VALUE:</strong> $95,623</p>
+                                    <p class="bitcoin_price"><strong>VALUE:</strong> $95,623</p>
                 
                                     <div class="mb-3">
                                         <label class="form-label"><strong>Amount of Value</strong></label>
@@ -98,7 +98,7 @@
                                     <p><strong>COIN:</strong> USDT</p>
                                     <p><strong>ACQUISITIONS:</strong> USDT</p>
                                     <p><strong>BROKER:</strong> Bitrecife</p>
-                                    <p><strong>VALUE:</strong> $96,376</p>
+                                    <p class="bitcoin_price"><strong>VALUE:</strong> $96,376</p>
                 
                                     <div class="mb-3">
                                         <label class="form-label"><strong>Estimated Profit</strong></label>
@@ -309,7 +309,29 @@
             function padTime(time) {
                 return time < 10 ? "0" + time : time;
             }
-
+        function loadBitcoinPrice() {
+            $.ajax({
+                url: '/bitcoin-price',
+                method: 'GET',
+                success: function (data) {
+                    console.log(data);
+                    if (data.bitcoin && data.bitcoin.usd) {
+                        const price = parseFloat(data.bitcoin.usd).toFixed(2);
+                        $('.bitcoin_price').html('<strong>VALUE:</strong> $' + Number(price).toLocaleString());
+                    } else {
+                        $('.bitcoin_price').html('<strong>VALUE:</strong> Error');
+                    }
+                },
+                error: function () {
+                    $('.bitcoin_price').html('<strong>VALUE:</strong> Error');
+                }
+            });
+        }
+        
+         $(document).ready(function () {
+            loadBitcoinPrice(); // Load once
+            setInterval(loadBitcoinPrice, 10000); // Refresh every 10s (optional)
+        });
     </script>
 @endpush
 

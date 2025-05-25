@@ -17,25 +17,42 @@
 
                     <form class="contact-form" method="POST" action="{{ route('user.balance.transfer.post') }}">
                         @csrf
+                        <input type="hidden" name="transfer_wallet" value="{{ $transferWallet }}">
                         <div class="card-body">
                             <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label for="InputMail">
-                                        <h5>@lang('Select Wallet')<span class="requred">*</span> </h5>
-                                    </label>
-                                    <select id="wallet_id" class="form-control form-control-lg" name="wallet_id">
-                                        <option selected disabled>Select Wallet</option>
-                                        @foreach ($wallets as $wallet)
-                                            @if ($wallet->wallet->display &&
-                                                $wallet->wallet->id != 3 &&
-                                                $wallet->wallet->id != 5 &&
-                                                $wallet->wallet->id != 9)
-                                                <option value="{{ $wallet->wallet->id }}">{{ $wallet->wallet->name }} -
-                                                    {{ getAmount($wallet->balance) }}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                </div>
+                                @if ($users != null || $transferWallet == 1)
+                                    <div class="form-group col-md-12">
+                                        <label for="InputMail">
+                                            <h5>@lang('Select User to Transfer')<span class="requred">*</span> </h5>
+                                        </label>
+                                        <select id="user_id" class="form-control form-control-lg" name="user_id">
+                                            <option selected disabled>Select User to Transfer</option>
+                                            @foreach ($users as $user)
+                                                <option value="{{ $user->id }}">{{ $user->firstname }} - {{ $user->lastname }}-({{ $user->username }})</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                @else
+                                    <div class="form-group col-md-12">
+                                        <label for="InputMail">
+                                            <h5>@lang('Select Wallet to Transfer')<span class="requred">*</span> </h5>
+                                        </label>
+                                        <select id="wallet_id" class="form-control form-control-lg" name="wallet_id">
+                                            <option selected disabled>Select Wallet to Transfer</option>
+                                            @foreach ($wallets as $wallet)
+                                                @if ($wallet->wallet->display &&
+                                                    $wallet->wallet->id != 3 &&
+                                                    $wallet->wallet->id != 5 &&
+                                                    $wallet->wallet->id != 2 &&
+                                                    $wallet->wallet->id != 4 &&
+                                                    $wallet->wallet->id != 9)
+                                                    <option value="{{ $wallet->wallet->id }}">{{ $wallet->wallet->name }} -
+                                                        {{ getAmount($wallet->balance) }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                @endif
                                 <div class="form-group col-md-12">
                                     <label for="InputMail">
                                         <h5>@lang('Transfer Amount')<span class="requred">*</span> </h5>
@@ -47,7 +64,7 @@
                                     <div id="balance-message"></div>
                                 </div>
                                 <div class="form-group col-md-12 text-center">
-                                    <p>{{ getAmount($general->bal_trans_fixed_charge) }}% Transfer charges apply</p>
+                                    {{-- <p>{{ getAmount($general->bal_trans_fixed_charge) }}% Transfer charges apply</p> --}}
                                 </div>
                             </div>
                         </div>
@@ -68,6 +85,7 @@
     <script>
         $(document).ready(function() {
             $(document).on('keyup', '#amount', function() {
+            return;
                 var inputAmount = parseFloat($('#amount').val());
                 var token = "{{ csrf_token() }}";
 
