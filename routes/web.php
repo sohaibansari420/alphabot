@@ -275,6 +275,7 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function () {
         // DEPOSIT SYSTEM
         Route::name('deposit.')->prefix('deposit')->group(function(){
             Route::get('/', 'DepositController@deposit')->name('list');
+            Route::get('/transfer/list', 'DepositController@depositTransfer')->name('list.transfer');
             Route::get('pending', 'DepositController@pending')->name('pending');
             Route::get('all_pending', 'DepositController@allPending')->name('all.pending');
             Route::get('rejected', 'DepositController@rejected')->name('rejected');

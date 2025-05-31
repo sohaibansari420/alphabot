@@ -215,6 +215,12 @@
                                     <span class="menu-title">@lang('All Deposits')</span>
                                 </a>
                             </li>
+                            <li class="sidebar-menu-item {{ menuActive('admin.deposit.list.transfer') }} ">
+                                <a href="{{ route('admin.deposit.list.transfer') }}" class="nav-link">
+                                    <i class="menu-icon las la-dot-circle"></i>
+                                    <span class="menu-title">@lang('All Transfers')</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>

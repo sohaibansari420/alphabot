@@ -71,6 +71,18 @@ class DepositController extends Controller
         return view('admin.deposit.log', compact('page_title', 'empty_message', 'deposits','successfullDeposit','pendingDeposit','rejectedDeposit'));
     }
 
+    public function depositTransfer()
+    {
+        $page_title = 'Transfer History';
+        $empty_message = 'No deposit history available.';
+
+        $transfers = Transaction::whereIn('remark',['user_transfer_balance','user_receive_balance'])->paginate(getPaginate());
+        $transferSend = Transaction::whereIn('remark',['user_transfer_balance'])->sum('amount');
+        $transfersReceive = Transaction::whereIn('remark',['user_receive_balance'])->sum('amount');
+        
+        return view('admin.deposit.transfer_list', compact('page_title', 'empty_message','transferSend','transfersReceive','transfers'));
+    }
+
     public function depViaMethod($method,$type = null){
         $method = Gateway::where('alias',$method)->firstOrFail();
 
