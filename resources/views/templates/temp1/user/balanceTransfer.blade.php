@@ -28,7 +28,9 @@
                                         <select id="user_id" class="form-control form-control-lg" name="user_id">
                                             <option selected disabled>Select User to Transfer</option>
                                             @foreach ($users as $user)
-                                                <option value="{{ $user->id }}">{{ $user->firstname }} - {{ $user->lastname }}-({{ $user->username }})</option>
+                                                @if (isset($user))
+                                                    <option value="{{ $user->id }}">{{ $user->firstname }} - {{ $user->lastname }}-({{ $user->username }})</option>
+                                                @endif
                                             @endforeach
                                         </select>
                                     </div>

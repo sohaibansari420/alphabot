@@ -125,6 +125,16 @@ class UserController extends Controller
         
         //updateRankStatus(Auth::id());
         
+        // Check New Team Users
+        $currentUser = Auth::user();
+        $targetUser = 1;
+        if (isUserInTree($targetUser, $currentUser->id)) {
+            $data['userInTree'] = "1";
+        }
+        else{
+            $data['userInTree'] = "0";
+        }  
+
         return view($this->activeTemplate . 'user.dashboard', $data);
     }
 

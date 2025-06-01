@@ -1708,6 +1708,19 @@ function getDownlineUsers($id)
     return $downlines;
 }
 
+function isUserInTree($rootUserId, $targetUserId)
+{
+    $tree = showTreePage($rootUserId);
+
+    foreach ($tree as $node) {
+        if ($node && $node->id == $targetUserId) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 function showSingleUserinTreeUser($user)
 {
     $res = '';
