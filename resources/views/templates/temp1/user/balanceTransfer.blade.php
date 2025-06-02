@@ -15,7 +15,7 @@
                 </div>
                 <div class="card-body">
 
-                    <form class="contact-form" method="POST" action="{{ route('user.balance.transfer.post') }}">
+                    <form class="contact-form" method="POST" action="{{ route('user.balance.transfer.post') }}" id="contact-form">
                         @csrf
                         <input type="hidden" name="transfer_wallet" value="{{ $transferWallet }}">
                         <div class="card-body">
@@ -81,11 +81,35 @@
             <!-- section-wrapper -->
         </div>
     </div>
+    <!-- Modal (Bootstrap example) -->
+    <div class="modal fade" id="amountModal" tabindex="-1" aria-labelledby="amountModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="amountModalLabel">Minimum Amount Required</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            The minimum amount to transfer is $50.
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Okay</button>
+        </div>
+        </div>
+    </div>
+    </div>
 @endsection
 
 @push('script')
     <script>
         $(document).ready(function() {
+            $('#contact-form').on('submit', function(e) {
+                var amount = parseFloat($('#amount').val());
+                if (isNaN(amount) || amount < 50) {
+                    e.preventDefault(); // Stop the form submission
+                    $('#amountModal').modal('show'); // Show the warning modal
+                }
+            });
             $(document).on('keyup', '#amount', function() {
             return;
                 var inputAmount = parseFloat($('#amount').val());
