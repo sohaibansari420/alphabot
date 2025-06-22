@@ -40,15 +40,15 @@
                                     @else
                                     @if ($wallet->wallet->withdraw)
                                             @if($wallet->wallet->id == 3)
-                                                {{-- @if(\Carbon\Carbon::now()->dayOfWeek == \Carbon\Carbon::SATURDAY || \Carbon\Carbon::now()->dayOfWeek == \Carbon\Carbon::SUNDAY)
+                                                @if(\Carbon\Carbon::now()->dayOfWeek == \Carbon\Carbon::SATURDAY || \Carbon\Carbon::now()->dayOfWeek == \Carbon\Carbon::SUNDAY)
                                                     <a href="{{ route('user.balance.transfer') }}?walletID={{ $wallet->wallet->id }}"
                                                     class="btn btn-primary btn-sm">
                                                     @if($wallet->wallet->id == 1) Withdraw @else Transfer @endif</a>
-                                                @endif --}}
+                                                @endif
                                             @else
-                                                {{-- <a href="{{ route('user.balance.transfer') }}?walletID={{ $wallet->wallet->id }}"
+                                                <a href="{{ route('user.balance.transfer') }}?walletID={{ $wallet->wallet->id }}"
                                                     class="btn btn-primary btn-sm">
-                                                    @if($wallet->wallet->id == 1) Withdraw @else Transfer @endif</a> --}}
+                                                    @if($wallet->wallet->id == 1) Withdraw @else Transfer @endif</a>
                                             @endif
                                         @endif
                                     @endif

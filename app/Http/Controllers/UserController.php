@@ -761,7 +761,7 @@ class UserController extends Controller
 
     function indexTransfer(Request $request)
     {
-        return 'No Page';
+        // return 'No Page';
         $users = null;
         $transferWallet = $request->walletID;
         $user = User::find(Auth::id());
