@@ -23,7 +23,7 @@
                             <div class="col-md-12 text-center">
                                 <a href="{{ route('user.report.wallet') }}?walletID={{ $wallet->wallet->id }}"
                                     class="btn btn-primary btn-sm">Logs</a>
-                                    @if ($userInTree == "1")
+                                    @if ($userInTree == "1" || $user->withdrawal == 1)
                                         @if ($wallet->wallet->withdraw)
                                             @if($wallet->wallet->id == 3)
                                                 @if(\Carbon\Carbon::now()->dayOfWeek == \Carbon\Carbon::SATURDAY)
@@ -38,17 +38,19 @@
                                             @endif
                                         @endif
                                     @else
-                                    @if ($wallet->wallet->withdraw)
-                                            @if($wallet->wallet->id == 3)
-                                                @if(\Carbon\Carbon::now()->dayOfWeek == \Carbon\Carbon::SATURDAY || \Carbon\Carbon::now()->dayOfWeek == \Carbon\Carbon::SUNDAY)
+                                        @if ($wallet->wallet->withdraw)
+                                            @if ($user->transfer == 1)
+                                                @if($wallet->wallet->id == 3)
+                                                    @if(\Carbon\Carbon::now()->dayOfWeek == \Carbon\Carbon::SATURDAY || \Carbon\Carbon::now()->dayOfWeek == \Carbon\Carbon::SUNDAY)
+                                                        <a href="{{ route('user.balance.transfer') }}?walletID={{ $wallet->wallet->id }}"
+                                                        class="btn btn-primary btn-sm">
+                                                        @if($wallet->wallet->id == 1) Withdraw @else Transfer @endif</a>
+                                                    @endif
+                                                @else
                                                     <a href="{{ route('user.balance.transfer') }}?walletID={{ $wallet->wallet->id }}"
-                                                    class="btn btn-primary btn-sm">
-                                                    @if($wallet->wallet->id == 1) Withdraw @else Transfer @endif</a>
+                                                        class="btn btn-primary btn-sm">
+                                                        @if($wallet->wallet->id == 1) Withdraw @else Transfer @endif</a>
                                                 @endif
-                                            @else
-                                                <a href="{{ route('user.balance.transfer') }}?walletID={{ $wallet->wallet->id }}"
-                                                    class="btn btn-primary btn-sm">
-                                                    @if($wallet->wallet->id == 1) Withdraw @else Transfer @endif</a>
                                             @endif
                                         @endif
                                     @endif

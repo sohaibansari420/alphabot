@@ -134,7 +134,7 @@ class UserController extends Controller
         else{
             $data['userInTree'] = "0";
         }  
-
+        $data['user'] = $currentUser;
         return view($this->activeTemplate . 'user.dashboard', $data);
     }
 
