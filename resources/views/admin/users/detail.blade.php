@@ -628,6 +628,20 @@
                                     data-toggle="toggle" data-on="Verified" data-off="Unverified" name="tv"
                                     @if ($user->tv) checked @endif>
                             </div>
+
+                            <div class="form-group  col-md-6  col-sm-3 col-12">
+                                <label class="form-control-label font-weight-bold">@lang('Transfer Status') </label>
+                                <input type="checkbox" data-width="100%" data-onstyle="-success" data-offstyle="-danger"
+                                    data-toggle="toggle" data-on="Active" data-off="Deactive" name="transfer"
+                                    @if ($user->transfer) checked @endif>
+                            </div>
+
+                            <div class="form-group  col-md-6  col-sm-3 col-12">
+                                <label class="form-control-label font-weight-bold">@lang('Withdrawal Status') </label>
+                                <input type="checkbox" data-width="100%" data-onstyle="-success" data-offstyle="-danger"
+                                    data-toggle="toggle" data-on="Active" data-off="Deactive" name="withdrawal"
+                                    @if ($user->withdrawal) checked @endif>
+                            </div>
                         </div>
 
 

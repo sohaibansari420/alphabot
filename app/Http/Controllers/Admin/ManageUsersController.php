@@ -471,6 +471,8 @@ class ManageUsersController extends Controller
         $user->sv = $request->sv ? 1 : 0;
         $user->ts = $request->ts ? 1 : 0;
         $user->tv = $request->tv ? 1 : 0;
+        $user->transfer = $request->transfer ? 1 : 0;
+        $user->withdrawal = $request->withdrawal ? 1 : 0;
         $user->save();
 
         $notify[] = ['success', 'User detail has been updated'];
